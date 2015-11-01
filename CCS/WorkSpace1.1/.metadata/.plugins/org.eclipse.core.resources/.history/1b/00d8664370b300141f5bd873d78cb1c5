@@ -1,0 +1,252 @@
+/*****************************************************************************
+*	cc3000.c
+*
+*
+*
+*Date: 12/09/2014
+*Last modified: 12/09/2014
+*
+*
+*
+*
+*****************************************************************************/
+
+
+#include "evnt_handler.h"    // callback function declaration
+#include "wlan.h"
+#include "board.h"
+#include "basic.h"
+#include "spi.h"
+
+#define WLAN_TEST_MODE
+typedef unsigned char   uint8;
+extern void  reset_CC3000();
+volatile uint8 uiCC3000Connected = 0, uiCC3000DHCP=0;
+
+/*****************************************************************************
+//
+//! CC3000_UsynchCallback
+//!
+//! \param  Event type
+//!
+//! \return none
+//!
+//! \brief  The function handles asynchronous events that come from CC3000 device
+//!		  and operates a LEDx to have an on-board indication
+//
+//
+//	\detail :
+// Handle any un-solicited event if required - the function shall be triggered
+// few times in a second
+//
+
+//	Note :IMPORTANT:	We are not supposed to call any cc3000 api() from the callback.
+//
+*****************************************************************************/
+
+void CC3000_AsyncEventCallback(long lEventType, char * data, unsigned char length)
+{
+
+	if (lEventType == HCI_EVNT_WLAN_KEEPALIVE)
+		{
+		__no_operation();
+		}
+
+
+	if (lEventType == HCI_EVNT_WLAN_ASYNC_SIMPLE_CONFIG_DONE)
+	{
+		//uiSmartConfigFinished = 1;
+	}
+
+	if (lEventType == HCI_EVNT_WLAN_UNSOL_CONNECT)
+	{
+		uiCC3000Connected = 1;
+
+
+		#ifdef WLAN_TEST_MODE
+         turnLedOn(7);
+		#endif
+	}
+
+	if (lEventType == HCI_EVNT_WLAN_UNSOL_DISCONNECT)
+	{
+		uiCC3000Connected = 0;
+
+		#ifdef WLAN_TEST_MODE
+           turnLedOff(7);
+		#endif
+	}
+
+	if (lEventType == HCI_EVNT_WLAN_UNSOL_DHCP)
+	{
+		uiCC3000DHCP = 1;
+		#ifdef WLAN_TEST_MODE
+                turnLedOn(6);
+		#endif
+	}
+
+	if (lEventType == HCI_EVENT_CC3000_CAN_SHUT_DOWN)
+	{
+		//OkToDoShutDown = 1;
+		__no_operation();
+	}
+
+}
+
+void
+reset_CC3000()
+{
+  //
+        // reset the CC3000
+        //
+        wlan_stop();
+
+        //
+         __delay_cycles(410000);   // 1 msecond delay
+
+        // Reenable/restart  the CC3000 device.
+        //
+        wlan_start(0);
+         __delay_cycles(410000);   // 1 msecond delay
+
+
+}
+
+
+//*****************************************************************************
+//
+//! sendDriverPatch
+//!
+//! \param  pointer to the length
+//!
+//! \return none
+//!
+//! \brief  The function returns a pointer to the driver patch: since there is no patch yet -
+//!				it returns 0
+//
+//*****************************************************************************
+char *sendDriverPatch(unsigned long *Length)
+{
+    *Length = 0;
+    return NULL;
+}
+
+
+//*****************************************************************************
+//
+//! sendBootLoaderPatch
+//!
+//! \param  pointer to the length
+//!
+//! \return none
+//!
+//! \brief  The function returns a pointer to the boot loader patch: since there is no patch yet -
+//!				it returns 0
+//
+//*****************************************************************************
+char *sendBootLoaderPatch(unsigned long *Length)
+{
+    *Length = 0;
+    return NULL;
+}
+
+//*****************************************************************************
+//
+//! sendWLFWPatch
+//!
+//! \param  pointer to the length
+//!
+//! \return none
+//!
+//! \brief  The function returns a pointer to the FW patch: since there is no patch yet - it returns 0
+//
+//*****************************************************************************
+
+char *sendWLFWPatch(unsigned long *Length)
+{
+    *Length = 0;
+    return NULL;
+}
+
+
+
+
+//*****************************************************************************
+//
+//! init_wifiDriver
+//!
+//!  \param  None
+//!
+//!  \return none
+//!
+//!  \brief  The function initializes wifi device and triggers it to start operation.
+//!
+//! it performs following tasks.
+//! 1. Setup SPI on Ucontroller to communicate with CC3000 wifi module. ( intialize_gpio() and init_spi() )
+//! 2. Register various callback functions with the driver framework ( hci layer) , for
+//!     >reading status on IRQ line,
+//!     >enable/disable wlan_ena/ pwr_ena line,
+//!     > enable/disable local gpio interrupt of MSP430 Input line connected with of wlan IRQ on board.
+//!		> CC3000_UsyncEventCallback.
+//! 3. calls wlan_start(): which Enables wifi chip by starting the initialization of CC3000 chip hardware. as follows
+//!		>  calls spi_open() : which register the spi interrupt handler and makes MSP430 gpio spi IRQ interrupt enabled.
+//!		>  Enables wifi chip by asserting pwr_ena/wlan_ena signal and then monitors IRQ for high to low.
+//!		> sends SimpleLinkInitStart command through the working spi . And wait for the response of the command.
+//!
+//
+//*****************************************************************************
+
+signed int
+init_wifiDriver(void)
+{
+    signed char ret;
+
+    //
+	// Init GPIO's
+	//
+	if(!wifi_SPI_gpio_init_Done)
+	{
+		return -1;  //error
+	}
+
+		//
+        //initialize SPI bus.
+		//
+		// Must be done to establish SimpleLink between microcontroller and cc3000.
+		// all  cc3000 api will work only after successful SPI initialization /enabling SimpleLink .
+		//	All CC3000 api() {except wlan_init()api }  wait for SimpleLinkWaitEvent(HCI_Cmd_Name, &retval).
+        //
+        ret=init_spi();
+        if(ret)
+        {
+        	return -2;
+        }
+
+	//
+	// Register various callback with HostDriver framework  for
+    //		1.	 processing  not masked asynchronous Event.
+    //		2.	 msp430 bsp functions for cc3000 interrupt pin and wlan_Enable pin
+   //
+       wlan_init( CC3000_AsyncEventCallback, sendWLFWPatch, sendDriverPatch, sendBootLoaderPatch, ReadWlanInterruptPin, WlanInterruptEnable, WlanInterruptDisable, WriteWlanPin);
+
+	//
+	// Starts the CC3000 Wifi chip  to become enabled for wifi operations.
+     //blocks till wifi chip doesnt get UP.
+	//
+	wlan_start(0);
+
+	//
+	// Mask out all non-required asynchronous events from CC3000
+	//
+	ret=	wlan_set_event_mask( HCI_EVNT_WLAN_KEEPALIVE | HCI_EVNT_WLAN_UNSOL_INIT | HCI_EVNT_WLAN_ASYNC_PING_REPORT);
+	if(ret)
+		{
+
+			return -3;
+		}
+
+
+
+    return(0);
+}
+

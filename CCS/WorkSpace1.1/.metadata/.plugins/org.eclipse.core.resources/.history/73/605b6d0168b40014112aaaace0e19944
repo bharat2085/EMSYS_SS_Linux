@@ -1,0 +1,46 @@
+/*
+ * alerts.c
+ *
+ *  Created on: 14/02/2015
+ *      Author: bharat
+ *
+ *      sos sw, ads sensor alerts msg support.
+ */
+
+void doAction_sslc(Msg* p)
+ {
+	int cmd;
+
+	 __no_operation();
+
+	 cmd= p->msg;
+
+	switch(cmd)
+	{
+
+	case SEND_ALERTS:
+
+		break;
+
+	case CLEAR_ALERTS:
+
+		break;
+
+	case SET_TEMP_THRESHOLD:
+		break;
+
+	case SET_SMOKEDETECT_THRESOLD:
+		break;
+
+
+
+	default:
+		_no_operation();
+		break;
+
+	}
+
+
+
+ }
+

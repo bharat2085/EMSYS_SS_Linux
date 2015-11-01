@@ -1,0 +1,1 @@
+"./snet.obj" "./schedule_output.obj" "./msp430_main.obj" "./features.obj" "./cc3000.obj" "./boot.obj" "./board.obj" "./board-pds.obj" "./appmain.obj" "./alerts.obj" -l"libc.a" "D:/CC3000FP_v1.0/CCS/Projects/CC3000 Spi/Debug/CC3000 Spi.lib" "D:/CC3000FP_v1.0/CCS/Projects/CC3000HostDriver/Debug/CC3000HostDriver.lib" "../lnk_msp430fr5739.cmd" 

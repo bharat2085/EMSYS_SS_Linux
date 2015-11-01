@@ -1,0 +1,322 @@
+/*
+ * snet.c
+ *
+ *  Created on: Aug 1, 2014
+ *      Author: bharat
+ */
+
+#include "basic.h"
+#include "snet.h"
+#include "board.h"
+
+#include "data_types.h"
+#include "socket.h"
+#include "netapp.h"
+#include "wlan.h"
+#include "cc3000.h"
+
+#define RX_BUF_LEN 20
+#define SERVER_PORT 4765
+
+
+
+signed short  hSocket ;
+sockaddr mgr_addr;
+
+uint8
+receive_msg_from_Mgr(Msg *p)
+{
+	socklen_t addrlen;
+	addrlen=sizeof(mgr_addr);
+	char * rxbuffer;
+	uint8 ret,n=0,i=0;
+	uint8 s =2;	//start of cmd data.
+
+
+
+	rxbuffer =( char *)malloc(RX_BUF_LEN); // calloc is used as it zeros the memory, what malloc doesnt.
+
+	memset(rxbuffer, 0, sizeof(rxbuffer));
+
+	ret=recvfrom(hSocket,rxbuffer,RX_BUF_LEN,0,&mgr_addr, &addrlen);
+		    	   if(ret>1)
+		    	   {
+		    		   p->feature= rxbuffer[s];
+		    		   p->cmd=rxbuffer[s+1];
+		    		  n = p->nParam=rxbuffer[s+2];
+
+		    		  while(n--)
+		    		  {
+		    			  p->sParam[i]=rxbuffer[s+3];
+		    		  }
+
+
+		    		   free(rxbuffer);
+		    		 return 0 ;
+
+		    	   }
+
+	free(rxbuffer);
+
+		    	   return 1;
+}
+
+send_msg_to_Mgr(char * txbuffer)
+{
+
+	//ret= sendto(hSocket,txbuffer,bufferlen,)
+}
+
+
+//*****************************************************************************
+//	OpenUdpPort_Mgr()
+//
+//
+//
+//
+//
+//*****************************************************************************
+signed char
+OpenUdpPort_Mgr(void )
+{
+    //
+        unsigned char mgr_ip[]={192,168,39,7};		//mgrs ip addr
+
+      //  unsigned char mask[4]={255,255,255,0};
+        //unsigned char gw[4]={192,168,39,1};
+        //unsigned char dns[4]={0};
+
+        //sockaddr mgr_addr;		// same as above//
+        sockaddr sockAddr;
+        int port;
+
+        unsigned long timeout= 200; //milliseconds
+        unsigned long timein;
+
+        socklen_t  optlen;
+
+       // unsigned char udev[6];
+        signed char ret;
+    //
+
+
+        //prints("\r Inside open connection with mgr. \n");
+
+
+
+
+
+
+
+    //1.
+           // wait for both dhcp && connection Event.
+           //
+             while ((uiCC3000DHCP == 0) || (uiCC3000Connected == 0))
+              {
+
+              //   prints("\r9\n");
+
+            	 /*
+        		//hci_unsolicited_event_handler();
+            	//This is not required for newer sp(FW).  */
+
+                   __delay_cycles(100000);
+              }
+
+   //2.
+          prints("\r creating udp socket\n");
+          /*
+          closesocket((long)1);
+          closesocket((long)3);
+          closesocket((long)2);
+          closesocket((long)4);
+          */
+
+      //
+      //create socket
+      //
+         hSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);	//SOCK_DGRAM
+                    if(hSocket==-1)
+                    {
+                      prints("\rError opening Socket\n");
+                      //fatatl error //
+                      fatal();
+                     }
+
+                      prints("\r Socket opened successfuly !!\n");
+
+#ifdef SOCK_STREAM
+     //3.
+
+          // bind the socket with above ip obtained from dhcp
+
+                   // nvmem_read(NVMEM_IP_CONFIG_FILEID,4,0,ip);
+                      	 port = SERVER_PORT;
+                         sockAddr.sa_family = AF_INET;
+
+                        // the source port
+                        sockAddr.sa_data[0] = (port & 0xFF00)>>8;
+                        sockAddr.sa_data[1] = (port & 0x00FF);
+                       /*
+                         // set above   IP address
+                         sockAddr.sa_data[2] =  ip[0];
+                         sockAddr.sa_data[3] =  ip[1];
+                         sockAddr.sa_data[4] =  ip[2];
+                         sockAddr.sa_data[5] =  ip[3];
+                      */
+                        ///*
+                          // set above   IP address
+                         sockAddr.sa_data[2] =  0;
+                         sockAddr.sa_data[3] =  0;
+                         sockAddr.sa_data[4] =  0;
+                         sockAddr.sa_data[5] =  0;
+                         //
+                       //  memcpy(&sockAddr.sa_data[2], ip, 4);
+
+
+               // /*
+                    ret= bind(hSocket, &sockAddr, sizeof(sockaddr));
+                    if(ret != 0)
+                    {
+                      prints("\r Error : binding socket\n");
+                      fatal();
+                    }
+                // */
+
+                    prints ("\r socket opened: Listening on Port 4444 (0x115c) \n");
+
+#endif
+
+
+
+
+    //4.
+                   ret =setsockopt(hSocket,SOL_SOCKET, SOCKOPT_RECV_TIMEOUT, &timeout,sizeof( timeout ) );//sizeof( timeout )
+                    if(ret== -1)
+                    {
+                      prints("\r Error changing rec_timeout \n");
+
+                    }
+
+                    timein=0;
+                    getsockopt(hSocket,SOL_SOCKET, SOCKOPT_RECV_TIMEOUT, &timein,&optlen  );//sizeof( timeout )
+                    prints("\r Rcv_timeout changed to 200ms \n");
+
+   //5.
+                    ///*
+                    //Connect
+                    //Establish tcp connection  with mgr.
+                    //
+                    port = (SERVER_PORT);
+                    mgr_addr.sa_family = AF_INET;
+                    // the source port
+                    mgr_addr.sa_data[0] = (port& 0xFF00)>>8;
+                    mgr_addr.sa_data[1] = (port& 0x00FF);
+                    // set above   IP address
+                    mgr_addr.sa_data[2] =  mgr_ip[0];
+                    mgr_addr.sa_data[3] =  mgr_ip[1];
+                    mgr_addr.sa_data[4] =  mgr_ip[2];
+                    mgr_addr.sa_data[5] =  mgr_ip[3];
+
+                   // ret= connect(hSocket,(const sockaddr*)&mgr_addr,sizeof(mgr_addr));
+
+//*/
+return ret;
+}
+
+
+
+
+int test_Connection()
+ {
+   uint8 ret=0;
+   char buffer[10]= "1234567";
+   unsigned int mgr_IP[4]={ 192,168,39,9};
+   sockaddr mgr_Addr;
+
+                        mgr_Addr.sa_family = AF_INET;
+
+                        // the source port
+                        mgr_Addr.sa_data[0] =0x11;
+                        mgr_Addr.sa_data[1] =0x5c;
+                        ///*
+                         // set above   IP address
+                         mgr_Addr.sa_data[2] =  mgr_IP[0];
+                         mgr_Addr.sa_data[3] =  mgr_IP[1];
+                         mgr_Addr.sa_data[4] =  mgr_IP[2];
+                         mgr_Addr.sa_data[5] =  mgr_IP[3];
+                       /*
+                          // set above   IP address
+                         mgr_Addr.sa_data[2] =  0xc0;
+                         mgr_Addr.sa_data[3] =  0xa8;
+                         mgr_Addr.sa_data[4] =  0x27;
+                         mgr_Addr.sa_data[5] =  0x03;
+                           //0x03;
+                         */
+
+
+   ret=sendto(hSocket, buffer,4,0, &mgr_Addr, sizeof(sockaddr));
+   if(ret>0)
+   {
+
+  // prints("\r bytes sent: to unicast  192.168.39.03, port 4444 \n");
+   }
+
+
+
+   return ret;
+ }
+
+
+signed char
+ConnectWithWellKnownAP()
+{
+	signed char ret;
+
+
+/*
+// Disable Profiles and Fast Connect
+ret= wlan_ioctl_set_connection_policy(0,0,0);
+if(ret){
+          prints("\r Error : set connection policy \n");
+         while(1);
+        //  fatal();
+        }
+
+
+ret=wlan_connect(WLAN_SEC_WEP,"BSNL_AP",7,
+                   NULL, "INDIA", 5);
+        if(ret)
+        {
+          prints(" Error : connecting with AP\n");
+          //fatal();
+          return ret;
+        }
+*/
+
+
+
+///*
+wlan_ioctl_del_profile(255);
+ ret=wlan_add_profile(WLAN_SEC_WEP,"BSNL_AP",7, NULL,0 ,5, 0,1,"INDIA", 0);
+ if(ret)
+ while(1);
+
+ wlan_ioctl_set_connection_policy(0,1,1); //only fast connect , DONT USE  open ap.
+
+ //reset CC3000 to apply policy.
+         reset_CC3000();
+
+//*/
+
+        return ret;
+}
+
+configureGetIpUsingDhcp()
+{
+
+	  //set ip for this wlan chipset( for this lmc device).
+
+	         netapp_dhcp(0,0,0,0);
+}
+

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="MemoryDumperFillAction">
+		<item value="255" key="MemoryFillDialog.STORE_DATA_VALUE_STRING_ID"/>
+		<item value="2560" key="MemoryFillDialog.STORE_SIZE_ID"/>
+		<item value="Default word size" key="MemoryFillDialog.STORE_TYPE_SIZE_ID"/>
+		<item value="0" key="MemoryFillDialog.STORE_ADDRESS_EXPRESSION_ID"/>
+	</section>
+	<section name="MemoryDumperLoadAction">
+	</section>
+	<section name="WorkbenchPreferenceDialogSettings">
+		<item value="-143" key="DIALOG_Y_ORIGIN"/>
+		<item value="-135" key="DIALOG_X_ORIGIN"/>
+	</section>
+	<section name="ShowViewDialog">
+		<item value="311" key="DIALOG_WIDTH"/>
+		<item value="org.eclipse.cdt.debug.ui.memory.memorybrowser.MemoryBrowser" key="ShowViewDialog.STORE_SELECTED_VIEW_ID"/>
+		<item value="87" key="DIALOG_Y_ORIGIN"/>
+		<item value="536" key="DIALOG_X_ORIGIN"/>
+		<item value="436" key="DIALOG_HEIGHT"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<list key="ShowViewDialog.STORE_EXPANDED_CATEGORIES_ID">
+			<item value="org.eclipse.ui"/>
+			<item value="com.ti.dvt.ui.viewCategory.dataView"/>
+			<item value="org.eclipse.cdt.ui.views"/>
+			<item value="org.eclipse.debug.ui"/>
+		</list>
+	</section>
+	<section name="MemoryDumperSaveAction">
+	</section>
+	<section name="ImportExportAction">
+	</section>
+</section>

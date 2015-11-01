@@ -1,0 +1,64 @@
+#ifndef _featurepack_commands_fpc_h
+#define _featurepack_commands_fpc_h
+
+
+// CURRENTLY SUPPORTED FEATURES IN THIS FEATURE PACK
+
+#define		FEATURE_PDS			1
+#define		FEATURE_DUKE		2
+#define		FEATURE_PLAYTONE	3
+#define		FEATURE_OPACCNTRL	4
+#define		FEATURE_ALERTS		5
+#define		FEATURE_SCHEDULE	11
+#define		FEATURE_RTC			12
+
+#define 	FEATURE_FWUPDATE	101
+#define		FEATURE_SYSINFO		102
+#define		FEATURE_REBOOT		103
+
+
+//
+//CURRENTLY SUPPORTED COMMANDS IN THIS FEATURE PACK
+//
+
+//FEATURE_PDS related commands.
+
+#define		CMD_ACTION_SWITCH_OUTX_ONOFF					101
+//#define	CMD_ACTION_SWITCH_OUTX_OFF						102
+#define		CMD_SET_OUTX_LEVEL								103
+
+#define		CMD_SET_OUTX_SCHEDULE_ONTIME					111
+#define		CMD_SET_OUTX_SCHEDULE_OFFTIME					112
+#define		CMD_ENABLE_OUTX_ONSCHEDULER						113
+#define		CMD_ENABLE_OUTX_OFFSCHEDULER					114
+
+
+//FEATURE_DUKE DOOR UNLOCK,KEYLESS ENTRY related commands.
+
+#define		CMD_ACTION_DOORLOCK_UNLATCH						201
+
+#define		CMD_ACTION_OPEN_DOOR							211
+#define		CMD_ACTION_CLOSE_DOOR							212
+
+//FEATURE_ALERTS related commands.
+
+#define 	CMD_ACTION_SEND_ALERTS							601
+#define		CMD_ACTION_CLEAR_ALERTS							602
+#define		CMD_ACTION_SET_TMP_THLD							603
+#define		CMD_ACTION_SET_SD_THLD							604
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endif

@@ -1,0 +1,187 @@
+/*
+ * appmain.c
+ *
+ *  Created on: Jul 4, 2014
+ *  Last Updated: feb 12, 2015
+ *      Author: bharat
+ */
+#include "basic.h"
+#include "snet.h"
+#include "board.h"
+#include "features.h"
+
+typedef signed char int8;
+
+//#define TEST_CONNECTION
+
+
+//#define TEST_SOCKET_RECEIVE
+
+extern void  testconnect_secured_wep();
+extern void  testconnect_unsecured();
+extern void  wait_for_connection();
+extern void  configureGetIpUsingDhcp();
+extern void  net_config_ip(unsigned long * );
+extern int   setsockopt_rcv_timeout( unsigned long);
+extern void  set_mac_addr(unsigned char *);
+//extern int8 OpenUdpPort_Mgr(long*, int );
+extern  int8 open_rxPort_Mgr();
+
+ extern int test_rcv_data();
+ extern int test_Connection();
+
+ Msg m;			//creating as auto variable results into malfunctioning due to stack overflow. hence made global.
+
+/************************************************************************************************
+ * 		Execute_Mgr_Cmd()
+ *
+ *
+ *
+ *
+ *****************************************************************************************************/
+void Execute_Mgr_Cmd()
+{
+	uint8 ret;
+	//Msg m;
+	uint8 feature;
+
+	ret=receive_msg_from_Mgr(&m);
+	if(!ret){
+		_no_operation();
+		return;
+
+	}
+
+							turnLedOn(SYSLED2);
+			  	    		// __delay_cycles(22000000);
+
+	feature = m.feature;
+
+//Execute Commands.
+	    //command interpreter.
+	switch (feature)
+	{
+	case 1:
+		doAction_sslc();
+		break;
+	case 2:
+		doAction_duke();
+		break;
+	case 3:
+		doAction_playtones();
+		break;
+	case 4:
+		doAction_glassOpacCntrl();
+		break;
+	case 5:
+		doAction_rtc();
+		break;
+	case 6:
+		doAction_appsAlerts();
+		break;
+
+	case 7:
+		doAction_fwUpdate();
+		break;
+	case 8:
+		doAction_SystemInfo();
+		break;
+	case 9:
+		doAction_fwReboot();
+		break;
+default:
+	_no_operation();
+	   break;
+}
+
+	turnLedOff(SYSLED2);
+
+	return;
+}
+
+/*********************************************************************************************
+ * 					appMain()
+ *
+ *
+ *
+ *********************************************************************************************/
+void
+appMain()
+{
+	uint8  err, i,count;
+
+		#ifdef 	FIRST_TIME_RUN
+
+		char ip[4]={192,168,39,99};
+		unsigned char mac[]={0x0, 0x25, 0xca, 0x03, 0x10, 0xef};
+
+		//do all configurations.
+		set_mac_addr(mac);
+	  // configureGetIpUsingDhcp();
+		net_config_ip((unsigned long *)ip);
+
+	   //then connect.
+	  // testconnect_unsecured();
+		ConnectWithWellKnownAP();
+		#endif
+
+
+
+		wait_for_connection();
+err=	open_rxPort_Mgr();
+		//err= OpenUdpPort_Mgr();
+		if(err)
+		{
+			//fatal error , failed to open socket with mgr.
+			// restart .
+			fatal();
+		}
+
+
+		err= setsockopt_rcv_timeout( 10000 );
+		if(err){
+					fatal();
+			}
+
+
+		for( i=15;  i>0;i--)
+		{
+				if(i>10)
+				count = 20;
+				else
+				count = 1*i;
+
+			toggleLed(SYSLED1);
+			while(count--)
+	    	 __delay_cycles( 400000);
+			//turnLedOn(SYSLED1);
+			 //__delay_cycles( 30000000);
+		}
+
+		turnLedOn(SYSLED1);
+    	 __delay_cycles(62000000);
+
+
+    	 //Infinite loop.
+    	 while(1) {
+
+    		 	 turnLedOff(SYSLED1);
+
+				#ifdef 	TEST_SOCKET_RECEIVE
+
+    		 	 test_rcv_data();
+    		 	 #else
+
+    		 	 Execute_Mgr_Cmd();
+
+    		 	 #endif
+
+    		 	 turnLedOn(SYSLED1);
+    		 	 __delay_cycles(22000000);
+    	 }
+
+
+//  return;
+}
+
+

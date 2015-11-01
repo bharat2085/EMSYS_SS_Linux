@@ -1,0 +1,36 @@
+/*
+ * appmain.c
+ *
+ *  Created on: Jul 4, 2014
+ *      Author: bharat
+ */
+
+#include "basic.h"
+
+void
+appMain()
+{
+uint8 ret;
+ret= OpenUdpPort_Mgr();
+if(ret!=0)
+{
+;
+   }
+
+
+// Enable global Interrupt.
+    //__bis_SR_register(GIE);
+
+
+    while(1)
+    {
+    	//ret=recvfrom(hSocket,rxbuffer,10,0,&agent_addr, &addrlen);
+    	   if(ret>1)
+    	   {
+    		   ;
+
+    	   }
+
+    }
+}
+

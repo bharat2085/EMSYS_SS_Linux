@@ -1,0 +1,132 @@
+/*****************************************************************************
+*Date: 22.10.2013 v11
+*Date: modified on 19.06.2014
+*****************************************************************************/
+#include <msp430.h>
+#include "basic.h"
+
+typedef unsigned char   uint8;
+extern uint8 bootMain();
+void testmain();
+
+
+//*****************************************************************************
+//
+//! \brief  Restarts the MSP430
+//!
+//! Restarts the MSP430 completely. One must be careful
+//!
+//! \return never
+//!
+//
+//*****************************************************************************
+void restartMSP430()
+{
+
+    PMMCTL0 |= PMMSWPOR;
+
+    // This function will never exit since it forces a complete
+    // restart of the MSP430.
+}
+
+
+//*****************************************************************************
+//
+//! init clk
+//!
+//!  \param  None
+//!
+//!  \return none
+//!
+//!  \brief :
+//
+//*****************************************************************************
+void initClk(void)
+{
+
+  // SMCLCK which will source also SPI will be sourced also by DCO, ACLK sourced by VLO.
+    //
+
+
+    CSCTL0_H = 0xA5;	//PSWD LOCK KEY
+
+    CSCTL1 |= DCORSEL + DCOFSEL0 + DCOFSEL1;	 // Set max. DCO setting// 24MHZ
+    CSCTL2 = SELA_1 + SELS_3 + SELM_3;		// set ACLK - VLO, the SMCLK = MCLK = DCO
+    CSCTL3 = DIVA_0 + DIVS_0 + DIVM_0;		// set all dividers to 0
+
+}
+
+//**************************************************************************************************
+//
+//! main
+//!
+//!  \param  None
+//!
+//!  \return none
+//!
+//!  \brief  - processor dependent boot , no info regarding board peripherals available here.
+//
+//*************************************************************************************************
+
+void main(void)
+{
+
+			uint8 ret;
+
+	  //  WATCHDOG TIMER
+	//						//(Stop/disable WDT).
+			WDTCTL = WDTPW + WDTHOLD;
+
+			//  SYSTEM CLOCK  Initialization .
+			initClk();
+
+		//wait for System Clock Stablization.
+			 __delay_cycles(110000);   //
+
+
+			 	//testmain();
+			ret = bootMain();
+			if(ret!=0)
+			{		//failed to boot.
+
+				//fatal();
+
+				//restart.- only thing we can do here is to restart ,as board level init not done.
+				restartMSP430();
+			}
+
+		//
+			 //  Indefinite while loop
+		//
+			 while(1)
+			        __no_operation();
+
+
+}
+// *******************      end of main       ***************************************//
+
+
+
+
+//********************************************************************************************
+//! testmain
+//!
+//!  \param  None
+//!
+//!  \return uint8
+//!
+//!  \brief	: processor dependent boot , no info regarding board peripherals available here.
+//      debug console not initiialised , so can use connected leds for debug purpose.
+//********************************************************************************************
+void testmain()
+{
+//do something to test that processor is running , without any issue.
+while(1)
+{
+	 __no_operation();
+__delay_cycles(110000);   //
+
+__no_operation();
+}
+
+}

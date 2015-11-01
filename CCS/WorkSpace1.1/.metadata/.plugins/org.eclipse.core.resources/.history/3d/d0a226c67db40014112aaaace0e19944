@@ -1,0 +1,79 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+CMD_SRCS += \
+../lnk_msp430fr5739.cmd 
+
+LIB_SRCS += \
+F:/project\ (i)/CC3000_Applications/CCS/Projects/CC3000\ Spi/Debug/CC3000\ Spi.lib \
+F:/project\ (i)/CC3000_Applications/CCS/Projects/CC3000HostDriver/Debug/CC3000HostDriver.lib 
+
+C_SRCS += \
+F:/project\ (i)/CC3000_Applications/Source/Application/alerts.c \
+F:/project\ (i)/CC3000_Applications/Source/Application/appmain.c \
+F:/project\ (i)/CC3000_Applications/Source/Application/board.c \
+F:/project\ (i)/CC3000_Applications/Source/Application/boot.c \
+F:/project\ (i)/CC3000_Applications/Source/Application/cc3000.c \
+F:/project\ (i)/CC3000_Applications/Source/Application/features.c \
+F:/project\ (i)/CC3000_Applications/Source/Application/msp430_main.c \
+F:/project\ (i)/CC3000_Applications/Source/Application/schedule_output.c \
+F:/project\ (i)/CC3000_Applications/Source/Application/snet.c 
+
+OBJS += \
+./alerts.obj \
+./appmain.obj \
+./board.obj \
+./boot.obj \
+./cc3000.obj \
+./features.obj \
+./msp430_main.obj \
+./schedule_output.obj \
+./snet.obj 
+
+C_DEPS += \
+./alerts.pp \
+./appmain.pp \
+./board.pp \
+./boot.pp \
+./cc3000.pp \
+./features.pp \
+./msp430_main.pp \
+./schedule_output.pp \
+./snet.pp 
+
+C_DEPS__QUOTED += \
+"alerts.pp" \
+"appmain.pp" \
+"board.pp" \
+"boot.pp" \
+"cc3000.pp" \
+"features.pp" \
+"msp430_main.pp" \
+"schedule_output.pp" \
+"snet.pp" 
+
+OBJS__QUOTED += \
+"alerts.obj" \
+"appmain.obj" \
+"board.obj" \
+"boot.obj" \
+"cc3000.obj" \
+"features.obj" \
+"msp430_main.obj" \
+"schedule_output.obj" \
+"snet.obj" 
+
+C_SRCS__QUOTED += \
+"F:/project (i)/CC3000_Applications/Source/Application/alerts.c" \
+"F:/project (i)/CC3000_Applications/Source/Application/appmain.c" \
+"F:/project (i)/CC3000_Applications/Source/Application/board.c" \
+"F:/project (i)/CC3000_Applications/Source/Application/boot.c" \
+"F:/project (i)/CC3000_Applications/Source/Application/cc3000.c" \
+"F:/project (i)/CC3000_Applications/Source/Application/features.c" \
+"F:/project (i)/CC3000_Applications/Source/Application/msp430_main.c" \
+"F:/project (i)/CC3000_Applications/Source/Application/schedule_output.c" \
+"F:/project (i)/CC3000_Applications/Source/Application/snet.c" 
+
+

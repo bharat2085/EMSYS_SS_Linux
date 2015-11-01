@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;nldc1100/socket.c&apos; to &apos;snet.c&apos;" description="Rename resource &apos;socket.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="socket.c" name="snet.c" stamp="1406838079959" updateReferences="true"/>
+</session>

@@ -1,0 +1,199 @@
+
+**** Clean-only build of configuration Debug for project nldc1100 ****
+
+C:\ti\ccsv5\utils\bin\gmake -k clean 
+DEL /F  "nldc1100.out"
+DEL /F "alerts.pp" "appmain.pp" "board-pds.pp" "board.pp" "boot.pp" "cc3000.pp" "features.pp" "msp430_main.pp" "schedule_output.pp" "snet.pp" 
+DEL /F "alerts.obj" "appmain.obj" "board-pds.obj" "board.obj" "boot.obj" "cc3000.obj" "features.obj" "msp430_main.obj" "schedule_output.obj" "snet.obj" 
+'Finished clean'
+' '
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project nldc1100 ****
+
+C:\ti\ccsv5\utils\bin\gmake -k all 
+'Building file: D:/CC3000FP_v1.0/Source/Application/alerts.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff --opt_for_speed=0 -g --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="D:/CC3000FP_v1.0/Source/CC3000 Spi" --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="D:/CC3000FP_v1.0/Source/CC3000HostDriver" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="alerts.pp"  "D:/CC3000FP_v1.0/Source/Application/alerts.c"
+'Finished building: D:/CC3000FP_v1.0/Source/Application/alerts.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/Application/appmain.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff --opt_for_speed=0 -g --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="D:/CC3000FP_v1.0/Source/CC3000 Spi" --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="D:/CC3000FP_v1.0/Source/CC3000HostDriver" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="appmain.pp"  "D:/CC3000FP_v1.0/Source/Application/appmain.c"
+"D:\CC3000FP_v1.0\Source\Application\board.h", line 13: warning #303-D: typedef name has already been declared (with same type)
+"D:/CC3000FP_v1.0/Source/Application/appmain.c", line 165: warning #225-D: function declared implicitly
+"D:/CC3000FP_v1.0/Source/Application/appmain.c", line 75: warning #179-D: function "Ist_run_config" was declared but never referenced
+'Finished building: D:/CC3000FP_v1.0/Source/Application/appmain.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/Application/board-pds.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff --opt_for_speed=0 -g --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="D:/CC3000FP_v1.0/Source/CC3000 Spi" --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="D:/CC3000FP_v1.0/Source/CC3000HostDriver" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="board-pds.pp"  "D:/CC3000FP_v1.0/Source/Application/board-pds.c"
+'Finished building: D:/CC3000FP_v1.0/Source/Application/board-pds.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/Application/board.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff --opt_for_speed=0 -g --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="D:/CC3000FP_v1.0/Source/CC3000 Spi" --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="D:/CC3000FP_v1.0/Source/CC3000HostDriver" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="board.pp"  "D:/CC3000FP_v1.0/Source/Application/board.c"
+'Finished building: D:/CC3000FP_v1.0/Source/Application/board.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/Application/boot.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff --opt_for_speed=0 -g --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="D:/CC3000FP_v1.0/Source/CC3000 Spi" --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="D:/CC3000FP_v1.0/Source/CC3000HostDriver" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="boot.pp"  "D:/CC3000FP_v1.0/Source/Application/boot.c"
+"D:\CC3000FP_v1.0\Source\Application\msg.h", line 4: warning #303-D: typedef name has already been declared (with same type)
+"D:\CC3000FP_v1.0\Source\Application\snet.h", line 14: warning #303-D: typedef name has already been declared (with same type)
+'Finished building: D:/CC3000FP_v1.0/Source/Application/boot.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/Application/cc3000.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff --opt_for_speed=0 -g --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="D:/CC3000FP_v1.0/Source/CC3000 Spi" --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="D:/CC3000FP_v1.0/Source/CC3000HostDriver" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="cc3000.pp"  "D:/CC3000FP_v1.0/Source/Application/cc3000.c"
+'Finished building: D:/CC3000FP_v1.0/Source/Application/cc3000.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/Application/features.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff --opt_for_speed=0 -g --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="D:/CC3000FP_v1.0/Source/CC3000 Spi" --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="D:/CC3000FP_v1.0/Source/CC3000HostDriver" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="features.pp"  "D:/CC3000FP_v1.0/Source/Application/features.c"
+'Finished building: D:/CC3000FP_v1.0/Source/Application/features.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/Application/msp430_main.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff --opt_for_speed=0 -g --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="D:/CC3000FP_v1.0/Source/CC3000 Spi" --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="D:/CC3000FP_v1.0/Source/CC3000HostDriver" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="msp430_main.pp"  "D:/CC3000FP_v1.0/Source/Application/msp430_main.c"
+'Finished building: D:/CC3000FP_v1.0/Source/Application/msp430_main.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/Application/schedule_output.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff --opt_for_speed=0 -g --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="D:/CC3000FP_v1.0/Source/CC3000 Spi" --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="D:/CC3000FP_v1.0/Source/CC3000HostDriver" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="schedule_output.pp"  "D:/CC3000FP_v1.0/Source/Application/schedule_output.c"
+'Finished building: D:/CC3000FP_v1.0/Source/Application/schedule_output.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/Application/snet.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff --opt_for_speed=0 -g --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="D:/CC3000FP_v1.0/Source/CC3000 Spi" --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="D:/CC3000FP_v1.0/Source/CC3000HostDriver" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="snet.pp"  "D:/CC3000FP_v1.0/Source/Application/snet.c"
+"D:\CC3000FP_v1.0\Source\Application\board.h", line 13: warning #303-D: typedef name has already been declared (with same type)
+"D:/CC3000FP_v1.0/Source/CC3000HostDriver/socket.h", line 417: warning #233-D: declaration is not visible outside of function
+'Finished building: D:/CC3000FP_v1.0/Source/Application/snet.c'
+' '
+'Building target: nldc1100.out'
+'Invoking: MSP430 Linker'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff --opt_for_speed=0 -g --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal -z --stack_size=150 -m"nldc1100.map" --heap_size=0 --use_hw_mpy=F5 -i"C:/ti/ccsv5/ccs_base/msp430/include" -i"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/lib" -i"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --reread_libs --warn_sections --rom_model -o "nldc1100.out"  "./snet.obj" "./schedule_output.obj" "./msp430_main.obj" "./features.obj" "./cc3000.obj" "./boot.obj" "./board.obj" "./board-pds.obj" "./appmain.obj" "./alerts.obj" -l"libc.a" "D:/CC3000FP_v1.0/CCS/Projects/CC3000 Spi/Debug/CC3000 Spi.lib" "D:/CC3000FP_v1.0/CCS/Projects/CC3000HostDriver/Debug/CC3000HostDriver.lib" "../lnk_msp430fr5739.cmd" 
+<Linking>
+'Finished building target: nldc1100.out'
+' '
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project nldc1100 ****
+
+C:\ti\ccsv5\utils\bin\gmake -k all 
+gmake: Nothing to be done for `all'.
+
+**** Build Finished ****
+
+**** Clean-only build of configuration Debug for project CC3000 Spi ****
+
+C:\ti\ccsv5\utils\bin\gmake -k clean 
+DEL /F  "CC3000 Spi.lib"
+DEL /F "spi.pp" 
+DEL /F "spi.obj" 
+'Finished clean'
+' '
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project CC3000 Spi ****
+
+C:\ti\ccsv5\utils\bin\gmake -k all 
+'Building file: D:/CC3000FP_v1.0/Source/CC3000 Spi/spi.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff -g --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --include_path="D:/CC3000FP_v1.0/Source/CC3000HostDriver" --include_path="D:/CC3000FP_v1.0/Source/Application" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="spi.pp"  "D:/CC3000FP_v1.0/Source/CC3000 Spi/spi.c"
+'Finished building: D:/CC3000FP_v1.0/Source/CC3000 Spi/spi.c'
+' '
+'Building target: CC3000 Spi.lib'
+'Invoking: MSP430 Archiver'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/ar430" r "CC3000 Spi.lib" "./spi.obj" 
+  ==>  new archive 'CC3000 Spi.lib'
+  ==>  building archive 'CC3000 Spi.lib'
+'Finished building target: CC3000 Spi.lib'
+' '
+
+**** Build Finished ****
+
+**** Clean-only build of configuration Debug for project CC3000HostDriver ****
+
+C:\ti\ccsv5\utils\bin\gmake -k clean 
+DEL /F  "CC3000HostDriver.lib"
+DEL /F "cc3000_common.pp" "evnt_handler.pp" "hci.pp" "netapp.pp" "nvmem.pp" "security.pp" "socket.pp" "wlan.pp" 
+DEL /F "cc3000_common.obj" "evnt_handler.obj" "hci.obj" "netapp.obj" "nvmem.obj" "security.obj" "socket.obj" "wlan.obj" 
+'Finished clean'
+' '
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project CC3000HostDriver ****
+
+C:\ti\ccsv5\utils\bin\gmake -k all 
+'Building file: D:/CC3000FP_v1.0/Source/CC3000HostDriver/cc3000_common.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff -g --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="cc3000_common.pp"  "D:/CC3000FP_v1.0/Source/CC3000HostDriver/cc3000_common.c"
+'Finished building: D:/CC3000FP_v1.0/Source/CC3000HostDriver/cc3000_common.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/CC3000HostDriver/evnt_handler.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff -g --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="evnt_handler.pp"  "D:/CC3000FP_v1.0/Source/CC3000HostDriver/evnt_handler.c"
+'Finished building: D:/CC3000FP_v1.0/Source/CC3000HostDriver/evnt_handler.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/CC3000HostDriver/hci.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff -g --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="hci.pp"  "D:/CC3000FP_v1.0/Source/CC3000HostDriver/hci.c"
+'Finished building: D:/CC3000FP_v1.0/Source/CC3000HostDriver/hci.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/CC3000HostDriver/netapp.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff -g --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="netapp.pp"  "D:/CC3000FP_v1.0/Source/CC3000HostDriver/netapp.c"
+'Finished building: D:/CC3000FP_v1.0/Source/CC3000HostDriver/netapp.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/CC3000HostDriver/nvmem.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff -g --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="nvmem.pp"  "D:/CC3000FP_v1.0/Source/CC3000HostDriver/nvmem.c"
+'Finished building: D:/CC3000FP_v1.0/Source/CC3000HostDriver/nvmem.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/CC3000HostDriver/security.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff -g --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="security.pp"  "D:/CC3000FP_v1.0/Source/CC3000HostDriver/security.c"
+'Finished building: D:/CC3000FP_v1.0/Source/CC3000HostDriver/security.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/CC3000HostDriver/socket.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff -g --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="socket.pp"  "D:/CC3000FP_v1.0/Source/CC3000HostDriver/socket.c"
+'Finished building: D:/CC3000FP_v1.0/Source/CC3000HostDriver/socket.c'
+' '
+'Building file: D:/CC3000FP_v1.0/Source/CC3000HostDriver/wlan.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff -g --include_path="D:/CC3000FP_v1.0/Source/inc" --include_path="C:/ti/ccsv5/ccs_base/msp430/include" --include_path="C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal --preproc_with_compile --preproc_dependency="wlan.pp"  "D:/CC3000FP_v1.0/Source/CC3000HostDriver/wlan.c"
+'Finished building: D:/CC3000FP_v1.0/Source/CC3000HostDriver/wlan.c'
+' '
+'Building target: CC3000HostDriver.lib'
+'Invoking: MSP430 Archiver'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/ar430" r "CC3000HostDriver.lib" "./wlan.obj" "./socket.obj" "./security.obj" "./nvmem.obj" "./netapp.obj" "./hci.obj" "./evnt_handler.obj" "./cc3000_common.obj" 
+  ==>  new archive 'CC3000HostDriver.lib'
+  ==>  building archive 'CC3000HostDriver.lib'
+'Finished building target: CC3000HostDriver.lib'
+' '
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project nldc1100 ****
+
+C:\ti\ccsv5\utils\bin\gmake -k all 
+'Building target: nldc1100.out'
+'Invoking: MSP430 Linker'
+"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/bin/cl430" -vmspx --abi=coffabi -Ooff --opt_for_speed=0 -g --gcc --define=__CCS__ --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal -z --stack_size=150 -m"nldc1100.map" --heap_size=0 --use_hw_mpy=F5 -i"C:/ti/ccsv5/ccs_base/msp430/include" -i"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/lib" -i"C:/ti/ccsv5/tools/compiler/msp430_4.1.1/include" --reread_libs --warn_sections --rom_model -o "nldc1100.out"  "./snet.obj" "./schedule_output.obj" "./msp430_main.obj" "./features.obj" "./cc3000.obj" "./boot.obj" "./board.obj" "./board-pds.obj" "./appmain.obj" "./alerts.obj" -l"libc.a" "D:/CC3000FP_v1.0/CCS/Projects/CC3000 Spi/Debug/CC3000 Spi.lib" "D:/CC3000FP_v1.0/CCS/Projects/CC3000HostDriver/Debug/CC3000HostDriver.lib" "../lnk_msp430fr5739.cmd" 
+<Linking>
+'Finished building target: nldc1100.out'
+' '
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project nldc1100 ****
+
+C:\ti\ccsv5\utils\bin\gmake -k all 
+gmake: Nothing to be done for `all'.
+
+**** Build Finished ****

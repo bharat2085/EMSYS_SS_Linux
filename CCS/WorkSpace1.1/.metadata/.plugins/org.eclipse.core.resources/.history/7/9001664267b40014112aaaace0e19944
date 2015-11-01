@@ -1,0 +1,33 @@
+/*
+ * alerts.c
+ *
+ *  Created on: 14/02/2015
+ *      Author: bharat
+ */
+
+void doAction_sslc(Msg* p)
+ {
+	int cmd;
+
+	 __no_operation();
+
+	 cmd= p->msg;
+
+	switch(cmd)
+	{
+
+	case 1:
+
+		break;
+
+
+	default:
+		_no_operation();
+		break;
+
+	}
+
+
+
+ }
+

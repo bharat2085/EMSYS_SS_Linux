@@ -1,0 +1,597 @@
+/*
+ * snet.c
+ *
+ *  Created on: 01/08/2014
+ *  Last Modified: 10/09/2014
+ *      Author: bharat bhushan
+ */
+
+#include "basic.h"
+#include "snet.h"
+#include "board.h"
+
+#include "data_types.h"
+#include "socket.h"
+#include "netapp.h"
+#include "nvmem.h"
+#include "wlan.h"
+#include "cc3000.h"
+#include "string.h"
+
+typedef signed char int8;
+
+#define RX_BUFFER_OVERHEAD   (20)
+#define RX_BUF_LEN 			30
+
+#define AGENTS_COMMON_PORT       5000
+#define MGR_PORT				 5001
+
+#define WLAN_CONNECT_USING_PROFILE
+
+ char rxbuffer[RX_BUF_LEN + RX_BUFFER_OVERHEAD ];
+
+long  hSocket_TX, hSocket_RX;
+
+sockaddr mgr_addr;
+
+void
+wait_for_connection()
+{
+
+	 // wait for both dhcp && connection Event.
+	        //
+	          while ((uiCC3000DHCP == 0) || (uiCC3000Connected == 0))
+	           {
+
+	                __delay_cycles(100000);
+	                //hci_unsolicited_event_handler();							//This is not required for newer sp(FW).  */
+	           }
+}
+
+
+long
+rcvdata_from( char* buffer, uint8 len,  int ip, int port )
+{
+	int ret;
+	sockaddr sockAddr;
+	socklen_t addrlen = sizeof(sockaddr);
+
+	  memset(&sockAddr,0, sizeof(sockaddr));
+
+	  sockAddr.sa_family = AF_INET;
+
+	  // the source port
+	  sockAddr.sa_data[0] = (port & 0xFF00)>>8;
+	  sockAddr.sa_data[1] = (port & 0x00FF);
+
+	  memset(&sockAddr.sa_data[2], 0, 4); //rcv from any ip.
+
+	  ret=recvfrom( hSocket_RX, buffer, len, 0, &sockAddr, &addrlen);
+	  if(ret>=1){
+
+	      	 // addrlen=sizeof(sockaddr);
+		  	  	  __no_operation();
+		  	  	  	  	  turnLedOn(SYSLED2);
+		  	    		 __delay_cycles(22000000);
+		  	    		turnLedOff(SYSLED2);
+	  	  }
+	  	  	else if(ret==0){
+
+	    	 //timeout
+	          __no_operation();
+
+	        }
+	        else if(ret<0) {
+
+	        		__no_operation();
+	                      //error
+	            }
+
+
+	return ret;
+}
+
+void
+test_rcv_data()
+{
+
+	rcvdata_from(rxbuffer, RX_BUF_LEN, 0, AGENTS_COMMON_PORT );
+}
+
+uint8
+receive_msg_from_Mgr(Msg *p)
+{
+		uint8 ret,n=0,i=0;
+		uint8 s =2;	//start of cmd data.
+
+		char * rxbuffer;
+		rxbuffer =( char *)malloc(RX_BUF_LEN); // calloc is used as it zeros the memory, what malloc doesnt.
+		memset(rxbuffer, 0, sizeof(rxbuffer));
+
+/*
+	socklen_t addrlen;
+	addrlen=sizeof(mgr_addr);
+*ret=recvfrom(hSocket,rxbuffer,RX_BUF_LEN,0,&mgr_addr, &addrlen);
+	*/
+
+
+		    	   if(ret>1)
+		    	   {
+		    		   p->feature= rxbuffer[s];
+		    		   p->cmd=rxbuffer[s+1];
+		    		  n = p->nParam=rxbuffer[s+2];
+
+		    		  while(n--)
+		    		  {
+		    			  p->sParam[i]=rxbuffer[s+3];
+		    		  }
+
+
+		    		   free(rxbuffer);
+		    		 return 0 ;
+
+		    	   }
+
+
+
+
+//free(rxbuffer);
+
+		    	   return 1;
+}
+
+send_msg_to_Mgr(char * txbuffer)
+{
+
+	//ret= sendto(hSocket,txbuffer,bufferlen,)
+}
+
+void
+net_config_ip(unsigned long * ip)
+{
+ char err=11;
+
+ char mask[4]={255,255,255,0};
+ char gw[4]= {192,168,39,1};
+ char dns[4]={0,0,0,0};
+
+	  //set ip for this wlan chipset( for this lmc device).
+
+	      err=   netapp_dhcp( ip , (unsigned long * )mask ,(unsigned long *) gw , (unsigned long *) dns );
+	      if(err)
+	      {
+	    	fatal();
+	      }
+
+	      reset_CC3000();
+	      __delay_cycles(40000000);
+}
+
+
+
+void
+configureGetIpUsingDhcp()
+{
+	char err=11;
+		  //set ip for this wlan chipset( for this lmc device).
+
+		      err=   netapp_dhcp(0,0,0,0);
+		      if(err)
+		      {
+		    	while(1)
+		    		__delay_cycles(100000);
+		      }
+
+		      reset_CC3000();
+		      __delay_cycles(30000000);
+
+}
+
+void
+set_mac_addr(unsigned char * mac_addr)
+{
+	unsigned char err;
+
+	err= nvmem_set_mac_address (mac_addr);
+	if(err)
+		fatal();
+}
+
+void
+set_netapp_timeouts()
+{
+    int ret;
+	unsigned long aucDhcp,aucArp, aucKeepalive,aucInactivity;
+
+    aucDhcp=14400;
+    aucArp=3600;
+    aucKeepalive=60;
+    aucInactivity=20; 		//2 *60 seconds
+
+    ret= netapp_timeout_values(aucDhcp,aucArp,aucKeepalive,aucInactivity);
+    if(ret!=0)
+               fatal();
+
+}
+
+int
+setsockopt_rcv_timeout( unsigned long timeout )
+{
+	 int ret;
+
+
+    //timeout= 10000; //milliseconds
+	 if(hSocket_RX<0)
+		 return -1;
+
+   ret =setsockopt(hSocket_RX,SOL_SOCKET, SOCKOPT_RECV_TIMEOUT, &timeout,sizeof(timeout) );
+    if(ret== -1)
+    {
+      //prints("\r Error changing rec_timeout \n");
+      fatal();
+
+    }
+
+    return 0;
+}
+
+
+//*****************************************************************************
+//	OpenUdpPort_Mgr()
+//
+//
+//
+//
+//
+//*****************************************************************************
+int8
+OpenUdpPort_Mgr(long *ptrSd, int port )
+{
+	     int8 ret=0;
+
+
+		// unsigned char mgr_ip[]={192,168,39,7};		//mgrs ip addr
+        //sockaddr mgr_addr;		// same as above//
+
+	     sockaddr sockAddr;
+
+    	 // int port  = AGENTS_COMMON_PORT;
+
+        //prints("\r Inside open connection with mgr. \n");
+
+    	  if ( (uiCC3000DHCP == 0) || (uiCC3000Connected == 0))
+    	  {
+    		  	return -1;
+    	   }
+
+
+    	//create socket
+        ret =*ptrSd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);	//SOCK_DGRAM
+                    if(ret==-1)
+                    {
+
+                    	          closesocket((long)1);
+                    	          closesocket((long)3);
+                    	          closesocket((long)2);
+                    	          closesocket((long)4);
+
+                    	          *ptrSd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);	//SOCK_DGRAM
+                    	          if(*ptrSd==-1)
+                    	          {
+                    	        	  prints("\rError opening Socket\n");
+
+                    	        	  fatal();
+                    	          }
+
+                     }
+
+
+        // bind socket to listen on the port defined for this app.
+
+                      	memset(&sockAddr,0, sizeof(sockaddr));
+
+                         sockAddr.sa_family = AF_INET;
+
+                        // the  port
+                        sockAddr.sa_data[0] = (port & 0xFF00)>>8;
+                        sockAddr.sa_data[1] = (port & 0x00FF);
+
+
+                        // the IP.
+                        //Only need to bind port with the socket.
+                        //  ip  must set as 0.0.0.0 ( cc3000 will automatically pick up the ip obtained by dhcp).
+                        memset(&sockAddr.sa_data[2], 0, 4);
+
+
+                    ret= bind(*ptrSd, &sockAddr, sizeof(sockaddr));
+                    if(ret != 0)
+                    {
+                     // prints("\r Error : binding socket\n");
+                      fatal();
+                    }
+
+
+return ret;
+}
+
+int8
+open_txPort_Mgr()
+{
+	int8 ret;
+ret= OpenUdpPort_Mgr( &hSocket_TX , MGR_PORT);
+
+	return ret;
+}
+
+int8
+open_rxPort_Mgr()
+{
+	int8 ret;
+
+ret=	OpenUdpPort_Mgr( &hSocket_RX, AGENTS_COMMON_PORT);
+
+	return ret;
+}
+
+void
+testconnect_unsecured()
+{
+	char ret;
+	// Disable Profiles and Fast Connect
+	ret= wlan_ioctl_set_connection_policy(0,0,0);
+	if(ret){
+	          prints("\r Error : set connection policy \n");
+	         while(1);
+	        //  fatal();
+	        }
+
+
+	ret=wlan_connect(WLAN_SEC_UNSEC,"BSNL_AP",7,
+	                   NULL, 0, 0);
+	if(ret)
+		fatal();
+
+}
+
+void
+testconnect_secured_wep()
+{
+int ret;
+// Disable Profiles and Fast Connect
+ret= wlan_ioctl_set_connection_policy(0,0,0);
+if(ret){
+          prints("\r Error : set connection policy \n");
+         while(1);
+        //  fatal();
+        }
+
+
+ret=wlan_connect(WLAN_SEC_WEP,"BSNL_AP",7,
+                   NULL, "INDIA", 5);
+        if(ret)
+        {
+          //prints(" Error : connecting with AP\n");
+          fatal();
+          return ret;
+        }
+//*/
+
+
+}
+
+signed char
+ConnectWithWellKnownAP()
+{
+	signed char ret;
+
+
+wlan_disconnect();
+wlan_ioctl_del_profile(255);
+ ret=wlan_add_profile(WLAN_SEC_WEP,"BSNL_AP",7, NULL,0 ,5, 0,1,"INDIA", 0);
+ if(ret)
+ fatal();
+ wlan_disconnect();
+ wlan_ioctl_set_connection_policy(0,1,1); //only fast connect , DONT USE  open ap.
+ wlan_disconnect();
+ //reset CC3000 to apply policy.
+         reset_CC3000();
+
+
+        return ret;
+}
+
+/********************************************************************************************************************/
+/********************************************************************************************************************/
+/********************************************************************************************************************/
+
+
+
+
+
+
+/*
+                         // set above   IP address
+                         sockAddr.sa_data[2] =  ip[0];
+                         sockAddr.sa_data[3] =  ip[1];
+                         sockAddr.sa_data[4] =  ip[2];
+                         sockAddr.sa_data[5] =  ip[3];
+                      */
+
+#ifdef USE_TCP_SOCKET
+void
+connect_Socket_Mgr()
+{
+
+
+   //5.
+                    ///*
+                    //Connect
+                    //Establish tcp connection  with mgr.
+                    //
+                    port = (SERVER_PORT);
+                    mgr_addr.sa_family = AF_INET;
+                    // the source port
+                    mgr_addr.sa_data[0] = (port& 0xFF00)>>8;
+                    mgr_addr.sa_data[1] = (port& 0x00FF);
+                    // set above   IP address
+                    mgr_addr.sa_data[2] =  mgr_ip[0];
+                    mgr_addr.sa_data[3] =  mgr_ip[1];
+                    mgr_addr.sa_data[4] =  mgr_ip[2];
+                    mgr_addr.sa_data[5] =  mgr_ip[3];
+
+                    ret= connect(hSocket,(const sockaddr*)&mgr_addr,sizeof(mgr_addr));
+
+//*/
+
+
+
+}
+#endif
+
+#ifdef TEST_PURPOSE_ONLY
+int test_Connection()
+ {
+   signed long ret=0;
+   char buffer[16]= {0,2,4,6,8,10,12,14,16,18,20};
+
+   unsigned int tofrom_IP[4]={ 192,168,39,4};
+ //  unsigned int mgr_IP[4]={ 192,168,39,2};
+   sockaddr mgr_Addr, Addr;
+   socklen_t addrlen = sizeof(sockaddr);
+   unsigned long aucDhcp,aucArp, aucKeepalive,aucInactivity;
+char a;
+char b,c ;
+char *p;
+
+//socklen_t  optlen;
+
+
+//void *rxbuffer;
+
+/*
+rxbuffer= malloc(RX_BUF_LEN);
+if(rxbuffer==NULL)while(1);
+*/
+
+  unsigned long timeout= 30000; //milliseconds
+
+
+
+
+
+  	  memset(&mgr_Addr, 0, sizeof(sockaddr));
+
+   while ((uiCC3000DHCP == 0) || (uiCC3000Connected == 0))__delay_cycles(100000);;
+
+   //
+        //create socket
+        //
+           hSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);	//SOCK_DGRAM
+                      if(hSocket==-1)
+                      {
+                        prints("\rError opening Socket\n");
+                        //fatatl error //
+                        fatal();
+                       }
+
+
+                      aucDhcp=14400;
+                      aucArp=3600;
+                      aucKeepalive=60;
+                      aucInactivity=150;
+
+                     ret= netapp_timeout_values(0,0,0,0);
+                     if(ret!=0)
+                    	 while(1);
+
+                        mgr_Addr.sa_family = AF_INET;
+
+                        // the source port
+                        mgr_Addr.sa_data[0] =0x12;
+                        mgr_Addr.sa_data[1] =0x9d;
+                        ///*
+
+
+                        memset(&mgr_Addr.sa_data[2],0,4);
+
+                        /*
+                         // set above   IP address
+                         mgr_Addr.sa_data[2] =  mgr_IP[0];
+                         mgr_Addr.sa_data[3] =  mgr_IP[1];
+                         mgr_Addr.sa_data[4] =  mgr_IP[2];
+                         mgr_Addr.sa_data[5] =  mgr_IP[3];
+                         */
+                       /*
+                          // set above   IP address
+                         mgr_Addr.sa_data[2] =  0xc0;
+                         mgr_Addr.sa_data[3] =  0xa8;
+                         mgr_Addr.sa_data[4] =  0x27;
+                         mgr_Addr.sa_data[5] =  0x03;
+                           //0x03;
+                         */
+
+
+//only bind the port with the socket on which do you want to hear in this  app, ip must  be kept 0.0.0.0 . cc3000  will automatically do the right.( bind with the ip obtained using dhcp).
+
+                         ret= bind(hSocket, &mgr_Addr, sizeof(sockaddr));
+                                            if(ret != 0)
+                                            	while(1);
+
+
+                         ret =setsockopt(hSocket,SOL_SOCKET, SOCKOPT_RECV_TIMEOUT, &timeout,sizeof( timeout ) );
+                         if(ret!=0)
+                         {
+                        	 while(1);
+                         }
+
+ 	 	 	 	 	 	 Addr.sa_family = AF_INET;
+
+                         // the source port
+                         Addr.sa_data[0] =0x12;
+                         Addr.sa_data[1] =0x9d;
+                         ///*
+                          // set above   IP address
+                          Addr.sa_data[2] =  tofrom_IP[0];
+                          Addr.sa_data[3] =  tofrom_IP[1];
+                          Addr.sa_data[4] =  tofrom_IP[2];
+                          Addr.sa_data[5] =  tofrom_IP[3];
+
+                         // /*
+                             ret=sendto(hSocket, buffer,16,0, &Addr, sizeof(sockaddr));
+                             if(ret<=0)
+                             {
+                          while(1);
+                            // prints("\r bytes sent: to unicast  192.168.39.03, port 4444 \n");
+                             }
+                          //*/
+
+   while(1)
+   {
+
+   ret=recvfrom(hSocket,rxbuffer,RX_BUF_LEN,0,&mgr_Addr, &addrlen);
+   		    	   if(ret>=1)
+   		    	   {
+   		    		   //while(1);
+   		    		   p= (char *)rxbuffer;
+
+   		    	   a=p[0];
+   		    	   b=p[1];
+   		    	   c=p[2];
+
+   		    	   addrlen=sizeof(sockaddr);
+   		    	   }
+   		    	   else if(ret==0)
+   		    	   {//timeout
+   		    		   __no_operation();
+   		    	   }
+   		    	   else if(ret<0){
+   		    		__no_operation();
+   		    		//error
+   		    	   }
+
+
+
+   }
+  // return ret;
+ }
+#endif
