@@ -1,4 +1,4 @@
 http://www.digikey.com/short/t9twhd
- new changes as follows. checking commit.(checkedin)
+ new changes as follows. checking commit.(checkedin)checking index.
 
 CHANGE1
