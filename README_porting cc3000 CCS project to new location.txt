@@ -8,4 +8,3 @@ You will need to follow following steps to shift/port cc3000 CCS project to new 
 6. If you have not changed the whole project directory, copied as it is from original project directory location. then you are done!!
 7  If you have changed , then links of source file will not work and you will need to import each file again,may need to change link of include and library directory.
 
-just like dat.
